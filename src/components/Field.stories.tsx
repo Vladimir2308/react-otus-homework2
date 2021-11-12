@@ -1,11 +1,11 @@
-import React from "react";
-import { Story, Meta } from "@storybook/react";
+import React from 'react';
+import { Story, Meta } from '@storybook/react';
 
-import Field from "./Field";
+import Field from './Field';
 
 export default {
   component: Field,
-  title: "Field",
+  title: 'Field',
 } as Meta;
 
 const Template: Story = (args) => (

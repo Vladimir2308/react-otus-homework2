@@ -1,25 +1,25 @@
-import React from "react";
-import Item from "./Item";
+import React, { ReactElement } from 'react';
+import Item from './Item';
 
-interface IProps {
+interface ComponentProps {
   horiz_count: number;
   vertic_count: number;
 }
 
-interface IState {
+interface ComponentState {
   display_num?: number | null;
 }
 
-class Field extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+class Field extends React.Component<ComponentProps, ComponentState> {
+  constructor(props: ComponentProps) {
     super(props);
     this.state = {
       display_num: null,
     };
   }
 
-  onclickItemToField = (id: number) => {
-    if (Number(this.state.display_num) === id) {
+  onclickItemToField = (id: number): void => {
+    if (this.state.display_num=== id) {
       this.setState({
         display_num: null,
       });
@@ -30,18 +30,19 @@ class Field extends React.Component<IProps, IState> {
     }
   };
 
-  render() {
-    let members = getMembers(this.props.horiz_count, this.props.vertic_count);
+  render(): ReactElement {
+    const  { horiz_count, vertic_count }  = this.props
+    const members = getMembers(horiz_count, vertic_count);
 
-    let rows = [];
+    const rows = [];
     let counter = 0;
     const fieldStyle = {
-      borderCollapse: "collapse",
+      borderCollapse: 'collapse',
       padding: 0,
     } as React.CSSProperties;
 
-    function getMembers(horiz_count: Number, vertic_count: Number) {
-      let items = [];
+    function getMembers(horiz_count: number, vertic_count: number) {
+      const items = [];
       let rows;
       for (let i = 0; i < horiz_count; i++) {
         rows = [];
@@ -54,13 +55,13 @@ class Field extends React.Component<IProps, IState> {
     }
 
     for (let i = 0; i < members.length; i++) {
-      let rowID = `row${i}`;
-      let cell = [];
+      const rowID = `row${i}`;
+      const cell = [];
       for (let j = 0; j < members[i].length; j++) {
-        let cellID = `cell${i}-${j}`;
+        const cellID = `cell${i}-${j}`;
         counter++;
         let num = null;
-        if (Number(this.state.display_num) === counter) {
+        if (this.state.display_num === counter) {
           num = counter;
         }
         // cell.push(<td key={cellID} id={cellID} style={fieldStyle}><Item display_num={members[i][j]} order_num={counter} itemToField={this.itemToField}/></td>)

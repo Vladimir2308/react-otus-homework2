@@ -1,11 +1,11 @@
-import React from "react";
-import { Story, Meta } from "@storybook/react";
+import React from 'react';
+import { Story, Meta } from '@storybook/react';
 
-import Item from "./Item";
+import Item from './Item';
 
 export default {
   component: Item,
-  title: "Item",
+  title: 'Item',
 } as Meta;
 
 const Template: Story = (args) => (

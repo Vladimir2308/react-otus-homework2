@@ -1,14 +1,13 @@
-import React from "react";
-import { render, screen } from "@testing-library/react";
+import React from 'react';
+import { render, screen } from '@testing-library/react';
 
-import Item from "./Item";
+import Item from './Item';
 
-describe("Item test cases", () => {
-  it("Item render correctly", () => {
-    const onReset = jest.fn();
-    let order_num = 999;
-    let display_num = 888;
-    let onclickItemToField = () => {};
+describe('Item test cases', () => {
+  it('Item render correctly', () => {
+    const order_num = 999;
+    const display_num = 888;
+    const onclickItemToField = () => undefined;
     const { container } = render(
       <Item
         onclickItemToField={onclickItemToField}
@@ -19,8 +18,8 @@ describe("Item test cases", () => {
     const cell = container.firstChild;
     expect(cell).not.toBeNull();
     if (!cell) return;
-    expect(cell.textContent === "888");
+    expect(cell.textContent).toEqual('888');
     const element = screen.getByText(display_num);
-    expect(Number(element.id) === order_num);
+    expect(parseInt(element.id) === order_num);
   });
 });

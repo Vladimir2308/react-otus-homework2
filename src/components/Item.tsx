@@ -1,18 +1,18 @@
-import React, { FC } from "react";
-import "./item.css";
+import React from 'react';
+import './item.css';
 
-interface Props {
-  onclickItemToField: any;
+interface ComponentProps {
+  onclickItemToField: (order_num: number) => void;
   order_num: number;
   display_num: number | null;
 }
 
-export default function Item(props: Props) {
+export default function Item(props: ComponentProps): JSX.Element {
   return (
     <div
       className="Item"
-      id={"" + props.order_num}
-      onClick={(e) => props.onclickItemToField(props.order_num)}
+      id={'' + props.order_num}
+      onClick={() => props.onclickItemToField(props.order_num)}
     >
       {props.display_num}
     </div>
