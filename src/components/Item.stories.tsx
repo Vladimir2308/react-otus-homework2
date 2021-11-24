@@ -8,9 +8,13 @@ export default {
   title: 'Item',
 } as Meta;
 
+const someFunction = (): void => {
+  return;
+};
+
 const Template: Story = (args) => (
   <Item
-    onclickItemToField={undefined}
+    onclickItemToField={someFunction}
     order_num={0}
     display_num={null}
     {...args}
