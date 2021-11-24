@@ -1,5 +1,6 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 import Item from './Item';
+import './field.css';
 
 interface ComponentProps {
   horiz_count: number;
@@ -19,7 +20,7 @@ class Field extends React.Component<ComponentProps, ComponentState> {
   }
 
   onclickItemToField = (id: number): void => {
-    if (this.state.display_num=== id) {
+    if (this.state.display_num === id) {
       this.setState({
         display_num: null,
       });
@@ -30,18 +31,14 @@ class Field extends React.Component<ComponentProps, ComponentState> {
     }
   };
 
-  render(): ReactElement {
-    const  { horiz_count, vertic_count }  = this.props
+  render() {
+    const { horiz_count, vertic_count } = this.props;
     const members = getMembers(horiz_count, vertic_count);
 
     const rows = [];
     let counter = 0;
-    const fieldStyle = {
-      borderCollapse: 'collapse',
-      padding: 0,
-    } as React.CSSProperties;
 
-    function getMembers(horiz_count: number, vertic_count: number) {
+    function getMembers(horiz_count: number, vertic_count: number): number[][] {
       const items = [];
       let rows;
       for (let i = 0; i < horiz_count; i++) {
@@ -64,9 +61,8 @@ class Field extends React.Component<ComponentProps, ComponentState> {
         if (this.state.display_num === counter) {
           num = counter;
         }
-        // cell.push(<td key={cellID} id={cellID} style={fieldStyle}><Item display_num={members[i][j]} order_num={counter} itemToField={this.itemToField}/></td>)
         cell.push(
-          <td key={cellID} id={cellID} style={fieldStyle}>
+          <td key={cellID} id={cellID} className="collapse">
             <Item
               display_num={num}
               order_num={counter}
@@ -76,7 +72,7 @@ class Field extends React.Component<ComponentProps, ComponentState> {
         );
       }
       rows.push(
-        <tr key={i} id={rowID} style={fieldStyle}>
+        <tr key={i} id={rowID} className="collapse">
           {cell}
         </tr>
       );
@@ -85,7 +81,7 @@ class Field extends React.Component<ComponentProps, ComponentState> {
       <div className="Field">
         <div className="row">
           <div className="col ">
-            <table id="simple" style={fieldStyle}>
+            <table id="simple" className="collapse">
               <tbody>{rows}</tbody>
             </table>
           </div>
@@ -95,4 +91,4 @@ class Field extends React.Component<ComponentProps, ComponentState> {
   }
 }
 
-export default Field;
+export { Field };

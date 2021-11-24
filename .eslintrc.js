@@ -22,6 +22,7 @@ module.exports = {
     rules: {
         'prettier/prettier': ['error', { singleQuote: true }],
         'react/prop-types': 0,
+        "@typescript-eslint/explicit-function-return-type": 1
 
     },
     overrides: [
