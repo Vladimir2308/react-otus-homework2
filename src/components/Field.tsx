@@ -14,9 +14,38 @@ interface ComponentState {
 class Field extends React.Component<ComponentProps, ComponentState> {
   constructor(props: ComponentProps) {
     super(props);
+    console.log('constructor');
     this.state = {
       display_num: null,
     };
+  }
+
+  componentDidMount(): void {
+    console.log('Fielsd componentDidMount');
+  }
+
+  componentWillUnmount(): void {
+    console.log('componentWillUnmount');
+  }
+
+  shouldComponentUpdate(
+    nextProps: ComponentProps,
+    nextState: ComponentState
+  ): boolean {
+    return !(this.state.display_num === nextState.display_num);
+  }
+
+  getMembers(horiz_count: number, vertic_count: number): number[][] {
+    const items = [];
+    let rows;
+    for (let i = 0; i < horiz_count; i++) {
+      rows = [];
+      for (let k = 0; k < vertic_count; k++) {
+        rows.push(Math.round(Math.random()));
+      }
+      items.push(rows);
+    }
+    return items;
   }
 
   onclickItemToField = (id: number): void => {
@@ -32,24 +61,13 @@ class Field extends React.Component<ComponentProps, ComponentState> {
   };
 
   render() {
+    console.log('Field render');
+
     const { horiz_count, vertic_count } = this.props;
-    const members = getMembers(horiz_count, vertic_count);
+    const members = this.getMembers(horiz_count, vertic_count);
 
     const rows = [];
     let counter = 0;
-
-    function getMembers(horiz_count: number, vertic_count: number): number[][] {
-      const items = [];
-      let rows;
-      for (let i = 0; i < horiz_count; i++) {
-        rows = [];
-        for (let k = 0; k < vertic_count; k++) {
-          rows.push(Math.round(Math.random()));
-        }
-        items.push(rows);
-      }
-      return items;
-    }
 
     for (let i = 0; i < members.length; i++) {
       const rowID = `row${i}`;
@@ -78,12 +96,14 @@ class Field extends React.Component<ComponentProps, ComponentState> {
       );
     }
     return (
-      <div className="Field">
-        <div className="row">
-          <div className="col ">
-            <table id="simple" className="collapse">
-              <tbody>{rows}</tbody>
-            </table>
+      <div>
+        <div className="Field">
+          <div className="row">
+            <div className="col ">
+              <table id="simple" className="collapse">
+                <tbody>{rows}</tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
