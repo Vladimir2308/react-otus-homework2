@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Props } from 'react';
 import { Field } from './Field';
 import './field.css';
 import fetch from 'node-fetch';
@@ -15,7 +15,6 @@ interface ComponentState {
 class Wrapper extends React.Component<unknown, ComponentState> {
   timerID: NodeJS.Timer | undefined;
   constructor(state: ComponentState) {
-    // super({});
     super(state);
     console.log('constructor');
     this.handleClick = this.handleClick.bind(this);
@@ -34,7 +33,7 @@ class Wrapper extends React.Component<unknown, ComponentState> {
     this.setState({ isLoading: true });
     this.timerID = setInterval(() => this.tick(), 1000);
 
-    this.doFetch();
+    this.getExternalData();
     document.addEventListener('click', this.handleClick);
   }
 
@@ -45,9 +44,12 @@ class Wrapper extends React.Component<unknown, ComponentState> {
   }
 
   componentDidUpdate(nextState: ComponentState): void {
+    console.log('__________this.state.factNum - ' + this.state.factNum);
+    console.log('__________nextState.factNumm - ' + nextState.factNum);
     if (this.state.factNum != nextState.factNum) {
       if (this.state.factNum === 10) {
-        this.setState({ infoMsg: '10 фактов было показано' });
+        console.log('_____________  fact num set 10 !!!!!!!!!');
+        this.setState({ infoMsg: '10 фактов было показано', factNum: 11 });
       }
     }
   }
@@ -56,7 +58,13 @@ class Wrapper extends React.Component<unknown, ComponentState> {
     this.setState({ date: new Date() });
   }
 
-  doFetch() {
+  async doFetch(url: string) {
+    const response = await fetch(url);
+    // const response = fetch(url);
+    return response;
+  }
+
+  async getExternalData() {
     const url = 'https://catfact.ninja/fact';
     let factNum = this.state.factNum;
     // const factFrom;
@@ -67,17 +75,13 @@ class Wrapper extends React.Component<unknown, ComponentState> {
       factNum++;
     }
     console.log('before fetch');
-    const promise = fetch(url);
-    console.log('after fetch before then');
-    promise
+    let json;
+    const response = this.doFetch(url);
+    response
       .then((response) => {
-        if (response.ok) {
-          console.log('!!!!!!!!!  response.json()' + response.json());
-          return response.json();
-        } else {
-          console.log('!!!!!!!!!  Something went wrong ...' + response);
-          throw new Error('Something went wrong ...');
-        }
+        const promise = response.json();
+        console.log('json() ' + promise);
+        return promise;
       })
       .then((data) =>
         this.setState({
@@ -87,13 +91,24 @@ class Wrapper extends React.Component<unknown, ComponentState> {
           infoMsg: infoMsg,
         })
       )
-      .catch((error) => this.setState({ error, isLoading: false }));
-    console.log('after then');
+      .catch((error) => {
+        console.log('error!!!! ' + error);
+        this.setState({ error, isLoading: false });
+      });
+
+    console.log('after fetch before then');
+
+    await this.setState({
+      fact: json.fact,
+      factNum: factNum,
+      isLoading: false,
+      infoMsg: infoMsg,
+    });
   }
 
   handleClick = (e: Event) => {
     if ((e.target as Element).id === 'button1') {
-      this.doFetch();
+      this.getExternalData();
       e.cancelBubble;
     }
   };
@@ -115,7 +130,7 @@ class Wrapper extends React.Component<unknown, ComponentState> {
     const { isLoading, error } = this.state;
 
     if (error) {
-      return <p>{error.message}</p>;
+      return <p>Произошла ошибка {error.message}</p>;
     }
 
     if (isLoading) {

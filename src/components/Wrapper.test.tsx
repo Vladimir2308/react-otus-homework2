@@ -11,24 +11,41 @@ describe('Wrapper', () => {
   });
 });
 
+describe('Wrapper', () => {
+  test('renders Wrapper component', () => {
+    const myMock = jest.fn();
+    myMock.mockReturnValue(Promise.resolve(1));
+    render(<Wrapper doFetch={myMock} />);
+
+    screen.debug();
+  });
+});
+
+// const fetchMock = jest
+//   .spyOn(global, 'fetch')
+//   .mockImplementation(() =>
+//     Promise.resolve({ json: () => Promise.resolve([]) })
+//   );
+
 describe('my test', () => {
   // it('calls the right route', async () => {
   it('calls the right route', () => {
-    const mockedFetch = jest.fn(() =>
-      Promise.resolve({
-        data: {},
-        status: 200,
-        statusText: 'OK',
-        headers: {},
-        config: {},
-      }).then(() => console.log('fetched then'))
-    );
-
-    global.fetch = mockedFetch;
+    // const mockedFetch = jest.fn(() =>
+    //   Promise.resolve({
+    //     data: { fact: 'dfsdfsdfsdfjklsdjfklsdjklfj' },
+    //     status: 200,
+    //     statusText: 'OK',
+    //     headers: {},
+    //     config: {},
+    //   }).then(() => console.log('fetched then'))
+    // );
+    //
+    // global.fetch = mockedFetch;
 
     const screen = render(<Wrapper />);
     screen.debug();
-    expect(mockedFetch).toBeCalled();
+    // expect(mockedFetch).toBeCalled();
+    expect(fetchMock).toHaveBeenCalledWith('https://catfact.ninja/fact');
   });
 });
 
