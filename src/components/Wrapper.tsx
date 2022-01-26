@@ -1,4 +1,4 @@
-import React, { Props } from 'react';
+import React from 'react';
 import { Field } from './Field';
 import './field.css';
 import fetch from 'node-fetch';
@@ -58,13 +58,7 @@ class Wrapper extends React.Component<unknown, ComponentState> {
     this.setState({ date: new Date() });
   }
 
-  async doFetch(url: string) {
-    const response = await fetch(url);
-    // const response = fetch(url);
-    return response;
-  }
-
-  async getExternalData() {
+  getExternalData() {
     const url = 'https://catfact.ninja/fact';
     let factNum = this.state.factNum;
     // const factFrom;
@@ -74,36 +68,17 @@ class Wrapper extends React.Component<unknown, ComponentState> {
     } else {
       factNum++;
     }
-    console.log('before fetch');
-    let json;
-    const response = this.doFetch(url);
-    response
-      .then((response) => {
-        const promise = response.json();
-        console.log('json() ' + promise);
-        return promise;
-      })
-      .then((data) =>
+    fetch(url)
+      .then((response) => response.json())
+      .then((result) =>
         this.setState({
-          fact: data.fact,
+          fact: result.fact,
           factNum: factNum,
           isLoading: false,
           infoMsg: infoMsg,
         })
       )
-      .catch((error) => {
-        console.log('error!!!! ' + error);
-        this.setState({ error, isLoading: false });
-      });
-
-    console.log('after fetch before then');
-
-    await this.setState({
-      fact: json.fact,
-      factNum: factNum,
-      isLoading: false,
-      infoMsg: infoMsg,
-    });
+      .catch((e) => this.setState({ infoMsg: e, isLoading: false }));
   }
 
   handleClick = (e: Event) => {
