@@ -9,5 +9,5 @@ Storybook для данного компонента работает
 Для запуска приложения "npm start".  
 Остановка приложения ctrl+C. 
 Для запуска тестов "npm test".  
-Для запуска storybook "npm run stotybook".  
+Для запуска storybook "npm run storybook".
 Остановка storybook ctrl+C.    
