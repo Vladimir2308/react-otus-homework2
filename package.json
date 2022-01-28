@@ -67,7 +67,8 @@
     "test": "jest --coverage",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "test:loki": "npm run build-storybook && npx loki --requireReference --reactUri file:./storybook-static"
+    "test:loki": "npm run build-storybook && npx loki --requireReference --reactUri file:./storybook-static",
+    "chromatic": "npx chromatic --project-token=26f8cef33e42"
   },
   "author": "",
   "license": "ISC"
