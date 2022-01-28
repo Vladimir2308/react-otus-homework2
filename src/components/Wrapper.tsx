@@ -1,7 +1,6 @@
 import React from 'react';
 import { Field } from './Field';
 import './field.css';
-import fetch from 'node-fetch';
 
 interface ComponentState {
   date: Date;
@@ -107,11 +106,14 @@ class Wrapper extends React.Component<unknown, ComponentState> {
     if (error) {
       return <p>Произошла ошибка {error.message}</p>;
     }
-
+    let fact;
     if (isLoading) {
-      return <p>Loading ...</p>;
+      fact = <p data-testid="loading">Loading ...</p>;
+    } else {
+      fact = <h3 data-testid="fact">Случайный факт: {this.state.fact}</h3>;
     }
     let infoMsg;
+
     if (this.state.infoMsg) {
       infoMsg = <h3>{this.state.infoMsg}</h3>;
     }
@@ -119,7 +121,7 @@ class Wrapper extends React.Component<unknown, ComponentState> {
       <div>
         <h3>Текущее время {this.currentTime(this.state.date)}</h3>
         <Field horiz_count={5} vertic_count={5} />
-        <h3>Случайный факт: {this.state.fact}</h3>
+        {fact}
         {infoMsg}
         <button id="button1">Следующий факт</button>
       </div>

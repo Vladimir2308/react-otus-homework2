@@ -3,9 +3,17 @@ import { render, screen } from '@testing-library/react';
 
 import { Wrapper } from './Wrapper';
 
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    json: () => Promise.resolve({ rates: { fact: 'some test fact' } }),
+  })
+);
+
 describe('Wrapper', () => {
-  test('renders Wrapper component', () => {
+  test('renders Wrapper component', async () => {
     render(<Wrapper />);
-    screen.debug();
+    expect(screen.getByTestId('loading'));
+    expect(screen.getAllByRole('button'));
+    console.log();
   });
 });
