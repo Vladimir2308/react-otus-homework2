@@ -26,4 +26,75 @@ describe('Field test cases', () => {
     userEvent.click(elementsByClassName);
     expect(screen.getByText(1));
   });
+
+  describe('Field with different filling ', () => {
+    it('row completed 1', () => {
+      const field2 = new Field({ horiz_count: 5, vertic_count: 5 });
+      const calcNextLabel = field2.calcNextLabel([
+        [1, 1, 1, 1, 1],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+      ]);
+      expect(calcNextLabel).toEqual([
+        [0, 1, 1, 1, 0],
+        [0, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+      ]);
+    });
+    it('field completed 1', () => {
+      const field2 = new Field({ horiz_count: 5, vertic_count: 5 });
+      const calcNextLabel = field2.calcNextLabel([
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1],
+      ]);
+      expect(calcNextLabel).toEqual([
+        [1, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 1],
+      ]);
+    });
+    it('field completed 0', () => {
+      const field2 = new Field({ horiz_count: 5, vertic_count: 5 });
+      const calcNextLabel = field2.calcNextLabel([
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+      ]);
+      expect(calcNextLabel).toEqual([
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+      ]);
+    });
+    it('field completed for new life', () => {
+      const field2 = new Field({ horiz_count: 5, vertic_count: 5 });
+      const calcNextLabel = field2.calcNextLabel([
+        [0, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0],
+        [0, 0, 0, 1, 0],
+        [0, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+      ]);
+      expect(calcNextLabel).toEqual([
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+      ]);
+    });
+  });
 });

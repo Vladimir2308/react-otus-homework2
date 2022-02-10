@@ -1,0 +1,31 @@
+.Panel {
+    padding: 0;
+    margin: 0;
+    width: 500px;
+    height: 100px;
+    border: 1px solid black;
+    font-size: 14pt;
+    flex-wrap: wrap;
+    text-align: center;
+    vertical-align: middle;
+    border-radius:  0  0 12px 12px;
+}
+
+.Name {
+    margin: 15px 15px 0 0;
+    width: 100px;
+    display: inline-block;
+    /*border: 1px solid black;*/
+}
+
+button {
+    /*padding: 5px;*/
+    margin: 0 15px 0 0;
+    width: 100px;
+    height: 30px;
+}
+
+.Row {
+    display: inline;
+    justify-content: space-evenly;
+}

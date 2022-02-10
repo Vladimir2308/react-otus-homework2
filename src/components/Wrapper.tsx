@@ -1,14 +1,16 @@
 import React from 'react';
 import { Field } from './Field';
 import './field.css';
+import Panel from './Panel';
 
 interface ComponentState {
   date: Date;
-  fact: string;
   isLoading: boolean;
   error?: Error | null;
-  factNum: number;
   infoMsg?: string | null;
+  horiz_count: number;
+  vertic_count: number;
+  speed: number;
 }
 
 class Wrapper extends React.Component<unknown, ComponentState> {
@@ -19,11 +21,12 @@ class Wrapper extends React.Component<unknown, ComponentState> {
     this.handleClick = this.handleClick.bind(this);
     this.state = {
       date: new Date(),
-      fact: '',
       isLoading: false,
       error: null,
-      factNum: 0,
       infoMsg: null,
+      horiz_count: 50,
+      vertic_count: 30,
+      speed: 1,
     };
   }
 
@@ -32,7 +35,6 @@ class Wrapper extends React.Component<unknown, ComponentState> {
     this.setState({ isLoading: true });
     this.timerID = setInterval(() => this.tick(), 1000);
 
-    this.getExternalData();
     document.addEventListener('click', this.handleClick);
   }
 
@@ -42,48 +44,36 @@ class Wrapper extends React.Component<unknown, ComponentState> {
     document.removeEventListener('click', this.handleClick);
   }
 
-  componentDidUpdate(nextState: ComponentState): void {
-    console.log('__________this.state.factNum - ' + this.state.factNum);
-    console.log('__________nextState.factNumm - ' + nextState.factNum);
-    if (this.state.factNum != nextState.factNum) {
-      if (this.state.factNum === 10) {
-        console.log('_____________  fact num set 10 !!!!!!!!!');
-        this.setState({ infoMsg: '10 фактов было показано', factNum: 11 });
-      }
-    }
-  }
+  componentDidUpdate(nextState: ComponentState): void {}
 
   tick(): void {
     this.setState({ date: new Date() });
   }
 
-  getExternalData() {
-    const url = 'https://catfact.ninja/fact';
-    let factNum = this.state.factNum;
-    // const factFrom;
-    let infoMsg: string | null;
-    if (factNum == 11) {
-      infoMsg = null;
-    } else {
-      factNum++;
-    }
-    fetch(url)
-      .then((response) => response.json())
-      .then((result) =>
-        this.setState({
-          fact: result.fact,
-          factNum: factNum,
-          isLoading: false,
-          infoMsg: infoMsg,
-        })
-      )
-      .catch((e) => this.setState({ infoMsg: e, isLoading: false }));
-  }
-
   handleClick = (e: Event) => {
     if ((e.target as Element).id === 'button1') {
-      this.getExternalData();
       e.cancelBubble;
+    }
+  };
+
+  setSpeed = (speed: number): void => {
+    this.setState({ speed: speed });
+  };
+
+  onclickItemToField = (button_id: number): void => {
+    if (button_id === 1) {
+      this.setState({ horiz_count: 50, vertic_count: 30 });
+    } else if (button_id === 2) {
+      this.setState({ horiz_count: 70, vertic_count: 50 });
+    } else if (button_id === 3) {
+      this.setState({ horiz_count: 100, vertic_count: 80 });
+    }
+    if (button_id === 11 && this.state.speed != 1) {
+      this.setState({ speed: 1 });
+    } else if (button_id === 12 && this.state.speed != 2) {
+      this.setState({ speed: 2 });
+    } else if (button_id === 13 && this.state.speed != 3) {
+      this.setState({ speed: 3 });
     }
   };
 
@@ -101,16 +91,10 @@ class Wrapper extends React.Component<unknown, ComponentState> {
 
   render() {
     console.log('Wrapper render');
-    const { isLoading, error } = this.state;
+    const { error } = this.state;
 
     if (error) {
       return <p>Произошла ошибка {error.message}</p>;
-    }
-    let fact;
-    if (isLoading) {
-      fact = <p data-testid="loading">Loading ...</p>;
-    } else {
-      fact = <h3 data-testid="fact">Случайный факт: {this.state.fact}</h3>;
     }
     let infoMsg;
 
@@ -120,10 +104,20 @@ class Wrapper extends React.Component<unknown, ComponentState> {
     return (
       <div>
         <h3>Текущее время {this.currentTime(this.state.date)}</h3>
-        <Field horiz_count={5} vertic_count={5} />
-        {fact}
+        <Field
+          horiz_count={this.state.horiz_count}
+          vertic_count={this.state.vertic_count}
+          speed={this.state.speed}
+          // setSpeed={this.setSpeed}
+          // parentCallback={this.setSpeed}
+        />
         {infoMsg}
-        <button id="button1">Следующий факт</button>
+        {/*<button id="button1">Следующий факт</button>*/}
+        <Panel
+          onclickItemToField={this.onclickItemToField}
+          selected_size={1}
+          selected_speed={11}
+        />
       </div>
     );
   }
