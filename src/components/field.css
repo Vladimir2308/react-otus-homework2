@@ -2,3 +2,18 @@
   border-collapse: collapse;
   padding: 0;
 }
+
+.Item{
+  width: 10px;
+  height: 10px;
+  border: 1px solid black;
+}
+
+.Item1 {
+  background-color: red;
+}
+
+.Item0 {
+  background-color: blue;
+}
+

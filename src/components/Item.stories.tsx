@@ -14,18 +14,15 @@ const someFunction = (): void => {
 
 const Template: Story = (args) => (
   <Item
-    onclickItemToField={someFunction}
-    order_num={0}
-    display_num={null}
+    // onclickItemToField={someFunction}
+    // order_num={0}
+    value={1}
     {...args}
   />
 );
 
 export const Primary = Template.bind({});
-Primary.args = { display_num: 2 };
+Primary.args = { value: 1 };
 
 export const Secondary = Template.bind({});
-Secondary.args = { display_num: 5 };
-
-export const Tertiary = Template.bind({});
-Tertiary.args = { display_num: 999 };
+Secondary.args = { value: 2 };

@@ -3,34 +3,39 @@ import Item from './Item';
 import './field.css';
 
 interface ComponentProps {
-  // parentCallback: (button_id: number) => void;
   horiz_count: number;
   vertic_count: number;
   getMembers?: (horiz_count: number, vertic_count: number) => number[][];
-  speed: number;
+  setGeneration: (generation: number) => void;
+  intervalMs: number;
+  filling_btn_id?: string | null;
 }
 
 interface ComponentState {
-  display_num?: number | null;
-  members?: Array<number>;
-  speed: number;
+  members?: number[][];
+  intervalMs: number;
   iterations: number;
 }
 
 class Field extends React.Component<ComponentProps, ComponentState> {
-  private members: number[][] = [];
+  // private members: number[][] = [];
   timerID: NodeJS.Timer | undefined;
   constructor(props: ComponentProps) {
     super(props);
     console.log('constructor');
     this.state = {
-      iterations: 0,
-      speed: this.props.speed,
+      iterations: -1,
+      intervalMs: this.props.intervalMs,
     };
   }
 
   tick(): void {
-    this.setState({ iterations: this.state.iterations + 1 });
+    if (this.state.iterations === -1) {
+      return;
+    }
+    const members: number[][] = this.calcNextLabel(this.state.members);
+    this.setState({ iterations: this.state.iterations + 1, members: members });
+    this.props.setGeneration(this.state.iterations);
   }
 
   componentDidMount(): void {
@@ -47,42 +52,133 @@ class Field extends React.Component<ComponentProps, ComponentState> {
     nextProps: ComponentProps,
     nextState: ComponentState
   ): boolean {
-    if (this.props.speed != nextProps.speed) {
-      clearInterval(this.timerID as NodeJS.Timeout);
-      let interval: number;
-      if (nextProps.speed === 1) {
-        interval = 1000;
-      } else if (nextProps.speed === 2) {
-        interval = 500;
-      } else {
-        interval = 100;
-      }
-      this.timerID = setInterval(() => this.tick(), interval);
+    if (this.props.vertic_count !== nextProps.vertic_count) {
       return true;
     }
-    // return !(this.state.display_num === nextState.display_num);
-    return this.state.iterations < nextState.iterations;
+    if (this.state.iterations !== nextState.iterations) {
+      return true;
+    }
+    if (
+      (this.props.filling_btn_id === undefined &&
+        nextProps.filling_btn_id !== undefined) ||
+      (this.props.filling_btn_id !== undefined &&
+        nextProps.filling_btn_id !== undefined &&
+        this.props.filling_btn_id !== nextProps.filling_btn_id)
+    ) {
+      return true;
+    }
+    return false;
   }
 
-  //todo переключение поля
-  getMembers(horiz_count: number, vertic_count: number): number[][] {
+  changeSpeed(intervalMs: number) {
+    this.setState({ intervalMs: intervalMs });
+    if (this.timerID !== undefined) {
+      clearInterval(this.timerID as NodeJS.Timeout);
+      this.timerID = setInterval(() => this.tick(), intervalMs);
+    }
+  }
+
+  pauseLife() {
+    clearInterval(this.timerID as NodeJS.Timeout);
+    this.timerID = undefined;
+  }
+
+  resumeLife() {
+    this.timerID = setInterval(() => this.tick(), this.props.intervalMs);
+  }
+
+  startLife() {
+    if (this.timerID == null) {
+      this.timerID = setInterval(() => this.tick(), this.props.intervalMs);
+    }
+    if (this.props.filling_btn_id != null) {
+      this.setState({ iterations: this.state.iterations + 1 });
+    }
+  }
+
+  clearField() {
+    this.pauseLife();
+    if (this.state.members === undefined) {
+      return;
+    }
+    const members = this.state.members;
+    const member = members[0];
+    member.fill(0);
+    members.fill(member);
+    this.props.setGeneration(0);
+    this.setState({ members: members, iterations: -1 });
+  }
+
+  generateField(filling: number) {
+    const members = this.getMembers(
+      this.props.horiz_count,
+      this.props.vertic_count,
+      filling
+    );
+    this.setState({ members: members, iterations: -1 });
+    this.props.setGeneration(0);
+  }
+
+  getGeneration(): number {
+    return this.state.iterations;
+  }
+
+  getMembers(
+    horiz_count: number,
+    vertic_count: number,
+    filling?: number
+  ): number[][] {
     if (this.props.getMembers !== undefined) {
       return this.props.getMembers(horiz_count, vertic_count);
     }
-    // if(this.props.getMembers)
-    const items = [];
     let rows;
+    let items;
+    if (filling === null || filling === undefined) {
+      console.log('fill !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+      items = [...Array(vertic_count)].map(() => Array(horiz_count).fill(0));
+      return items;
+    }
+    items = [];
+    let b;
+    let countItem = 0;
     for (let i = 0; i < vertic_count; i++) {
       rows = [];
       for (let k = 0; k < horiz_count; k++) {
-        rows.push(Math.round(Math.random()));
+        b = Math.round(Math.random());
+        if (b === 1) {
+          countItem++;
+        }
+        rows.push(b);
       }
       items.push(rows);
+    }
+    const calcFillingCount = Math.floor(vertic_count * horiz_count * filling);
+    if (countItem > calcFillingCount) {
+      while (countItem > calcFillingCount) {
+        const y = Math.floor(Math.random() * vertic_count);
+        const x = Math.floor(Math.random() * horiz_count);
+        if (items[y][x] === 1) {
+          items[y][x] = 0;
+          countItem--;
+        }
+      }
+    } else if (countItem < calcFillingCount) {
+      while (countItem < calcFillingCount) {
+        const y = Math.floor(Math.random() * vertic_count);
+        const x = Math.floor(Math.random() * horiz_count);
+        if (items[y][x] === 0) {
+          items[y][x] = 1;
+          countItem++;
+        }
+      }
     }
     return items;
   }
 
-  calcNextLabel(membersOld: number[][]) {
+  calcNextLabel(membersOld: number[][] | undefined) {
+    if (membersOld === undefined) {
+      return [];
+    }
     let count;
     const membersNew: number[][] = [];
     for (let x = 0; x < membersOld.length; x++) {
@@ -147,54 +243,75 @@ class Field extends React.Component<ComponentProps, ComponentState> {
     return membersNew;
   }
 
-  onclickItemToField = (id: number): void => {
-    // todo add pause for iteration here
-    if (this.state.display_num === id) {
-      this.setState({
-        display_num: null,
-      });
+  getMembersForNewFieldSize(
+    membersOld: number[][],
+    horiz_count: number,
+    vertic_count: number
+  ): number[][] {
+    const membersNew: number[][] = [];
+    if (membersOld.length > vertic_count) {
+      for (let i = 0; i < vertic_count; i++) {
+        membersNew[i] = [];
+        for (let j = 0; j < horiz_count; j++) {
+          membersNew[i][j] = membersOld[i][j];
+        }
+      }
     } else {
-      this.setState({
-        display_num: id,
-      });
+      for (let i = 0; i < vertic_count; i++) {
+        membersNew[i] = [];
+        for (let j = 0; j < horiz_count; j++) {
+          if (i < membersOld.length && j < membersOld[i].length) {
+            membersNew[i][j] = membersOld[i][j];
+          } else {
+            membersNew[i][j] = 0;
+          }
+        }
+      }
     }
-  };
+    return membersNew;
+  }
 
   render() {
-    console.log('Field render');
-
     const { horiz_count, vertic_count } = this.props;
-    if (this.members.length === 0) {
-      this.members = this.getMembers(horiz_count, vertic_count);
+
+    let members: number[][] | undefined = this.state.members;
+
+    if (members === undefined) {
+      members = [...Array(vertic_count)].map(() => Array(horiz_count).fill(0));
+    } else if (members.length === 0) {
+      members = this.getMembers(horiz_count, vertic_count);
     } else {
-      if (this.members.length != vertic_count) {
-        this.members = this.getMembers(horiz_count, vertic_count);
-      } else {
-        this.members = this.calcNextLabel(this.members);
+      if (members.length != vertic_count) {
+        members = this.getMembersForNewFieldSize(
+          members,
+          horiz_count,
+          vertic_count
+        );
       }
     }
 
     const rows = [];
-    let counter = 0;
+    // const counter = 0;
 
-    for (let i = 0; i < this.members.length; i++) {
+    for (let i = 0; i < members.length; i++) {
       const rowID = `row${i}`;
       const cell = [];
-      for (let j = 0; j < this.members[i].length; j++) {
+      for (let j = 0; j < members[i].length; j++) {
         const cellID = `cell${i}-${j}`;
-        counter++;
-        let num = null;
-        if (this.state.display_num === counter) {
-          num = counter;
+        // counter++;
+        // let num = null;
+        // if (this.state.display_num === counter) {
+        //   num = counter;
+        // }
+        let className: string;
+        if (members[i][j] === 1) {
+          className = 'Item Item1';
+        } else {
+          className = 'Item Item0';
         }
         cell.push(
           <td key={cellID} id={cellID} className="collapse">
-            <Item
-              // display_num={num}
-              display_num={this.members[i][j]}
-              order_num={counter}
-              onclickItemToField={this.onclickItemToField}
-            />
+            <div className={className} />
           </td>
         );
       }
