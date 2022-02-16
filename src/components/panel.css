@@ -20,8 +20,6 @@
     margin: 15px 15px 0 0;
     width: 120px;
     display: inline-block;
-    /*text-align: left;*/
-    /*padding-left: 15px;*/
 }
 
 .Generation {
@@ -29,12 +27,11 @@
     width: 140px;
     display: inline-block;
     text-align: left;
-    /*padding-left: 10px;*/
 }
 
 .EmptyBlock {
     margin: 25px 15px 0 0;
-    width: 123px;
+    width: 120px;
     display: inline-block;
 }
 

@@ -43,13 +43,13 @@ class Wrapper extends React.Component<unknown, ComponentState> {
   onclickItemToField = (button_id: string): void => {
     if (button_id === 'size1') {
       this.setState({ size: 1 });
-      // this.fieldElement.current?.changeFieldSize();
+      this.fieldElement.current?.changeFieldSize(50, 30);
     } else if (button_id === 'size2') {
       this.setState({ size: 2 });
-      // this.fieldElement.current?.changeFieldSize();
+      this.fieldElement.current?.changeFieldSize(70, 50);
     } else if (button_id === 'size3') {
       this.setState({ size: 3 });
-      // this.fieldElement.current?.changeFieldSize();
+      this.fieldElement.current?.changeFieldSize(100, 80);
     } else if (button_id === Speed[Speed.SpeedSlow]) {
       this.fieldElement.current?.changeSpeed(Speed.SpeedSlow);
       this.setState({ speed: Speed.SpeedSlow });
@@ -86,18 +86,6 @@ class Wrapper extends React.Component<unknown, ComponentState> {
   render(): JSX.Element {
     console.log('Wrapper render');
 
-    let horiz_count: number;
-    let vertic_count: number;
-    if (this.state.size === 1) {
-      horiz_count = 50;
-      vertic_count = 30;
-    } else if (this.state.size === 2) {
-      horiz_count = 70;
-      vertic_count = 50;
-    } else {
-      horiz_count = 100;
-      vertic_count = 80;
-    }
     return (
       <div className="Wrapper">
         <HeaderPanel
@@ -107,12 +95,12 @@ class Wrapper extends React.Component<unknown, ComponentState> {
           active_btn={this.state.filling_btn_id}
         />
         <Field
-          horiz_count={horiz_count}
-          vertic_count={vertic_count}
           intervalMs={this.state.speed}
           ref={this.fieldElement}
           setGeneration={this.setGeneration}
           filling_btn_id={this.state.filling_btn_id}
+          horiz_count={50}
+          vertic_count={30}
         />
         <BottomPanel
           onclickItemToField={this.onclickItemToField}

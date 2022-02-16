@@ -2,18 +2,20 @@ import React from 'react';
 import './field.css';
 import { Speed } from './Wrapper';
 interface ComponentProps {
-  horiz_count: number;
-  vertic_count: number;
   getMembers?: (horiz_count: number, vertic_count: number) => number[][];
   setGeneration: (generation: number) => void;
   intervalMs: number;
   filling_btn_id?: string | null;
+  horiz_count: number;
+  vertic_count: number;
 }
 
 interface ComponentState {
   members?: number[][];
   intervalMs: number;
   iterations: number;
+  horiz_count: number;
+  vertic_count: number;
 }
 
 class Field extends React.Component<ComponentProps, ComponentState> {
@@ -24,6 +26,8 @@ class Field extends React.Component<ComponentProps, ComponentState> {
     this.state = {
       iterations: -1,
       intervalMs: this.props.intervalMs,
+      horiz_count: this.props.horiz_count,
+      vertic_count: this.props.vertic_count,
     };
   }
 
@@ -31,14 +35,14 @@ class Field extends React.Component<ComponentProps, ComponentState> {
     if (this.state.iterations === -1) {
       return;
     }
-    const members: number[][] = this.calcNextLabel(this.state.members);
+    const members: number[][] = this.calcNextGeneration(this.state.members);
     this.setState({ iterations: this.state.iterations + 1, members: members });
     this.props.setGeneration(this.state.iterations);
   }
 
   componentDidMount(): void {
     console.log('Field componentDidMount');
-    this.timerID = setInterval(() => this.tick(), Speed.SpeedSlow);
+    // this.timerID = setInterval(() => this.tick(), Speed.SpeedSlow);
   }
 
   componentWillUnmount(): void {
@@ -50,13 +54,13 @@ class Field extends React.Component<ComponentProps, ComponentState> {
     nextProps: ComponentProps,
     nextState: ComponentState
   ): boolean {
-    if (this.props.vertic_count !== nextProps.vertic_count) {
+    if (this.state.vertic_count !== nextState.vertic_count) {
       return true;
     }
     if (this.state.iterations !== nextState.iterations) {
       return true;
     }
-    if (
+    return (
       (this.props.filling_btn_id === undefined &&
         nextProps.filling_btn_id !== undefined) ||
       (this.props.filling_btn_id !== undefined &&
@@ -64,13 +68,10 @@ class Field extends React.Component<ComponentProps, ComponentState> {
         this.props.filling_btn_id !== nextProps.filling_btn_id) ||
       (this.props.filling_btn_id !== undefined &&
         nextProps.filling_btn_id === undefined)
-    ) {
-      return true;
-    }
-    return false;
+    );
   }
 
-  changeSpeed(intervalMs: number) {
+  changeSpeed(intervalMs: number): void {
     this.setState({ intervalMs: intervalMs });
     if (this.timerID !== undefined) {
       clearInterval(this.timerID as NodeJS.Timeout);
@@ -78,16 +79,20 @@ class Field extends React.Component<ComponentProps, ComponentState> {
     }
   }
 
-  pauseLife() {
+  pauseLife(): void {
     clearInterval(this.timerID as NodeJS.Timeout);
     this.timerID = undefined;
   }
 
-  resumeLife() {
+  resumeLife(): void {
     this.timerID = setInterval(() => this.tick(), this.props.intervalMs);
   }
 
-  startLife() {
+  startLife(): void {
+    if (this.props.filling_btn_id == null) {
+      window.alert('Select Filling!');
+      return;
+    }
     if (this.timerID == null) {
       this.timerID = setInterval(() => this.tick(), this.props.intervalMs);
     }
@@ -96,7 +101,7 @@ class Field extends React.Component<ComponentProps, ComponentState> {
     }
   }
 
-  clearField() {
+  clearField(): void {
     this.pauseLife();
     if (this.state.members === undefined) {
       return;
@@ -109,33 +114,39 @@ class Field extends React.Component<ComponentProps, ComponentState> {
     this.setState({ members: members, iterations: -1 });
   }
 
-  generateField(filling: number) {
-    const members = this.getMembers(
-      this.props.horiz_count,
-      this.props.vertic_count,
+  generateField(filling: number): void {
+    const members = this.getFirstGeneration(
+      this.state.horiz_count,
+      this.state.vertic_count,
       filling
     );
     this.setState({ members: members, iterations: -1 });
     this.props.setGeneration(0);
   }
 
-  // changeFieldSize() {
-  //   if (this.state.members === undefined) {
-  //     return;
-  //   }
-  //   const members: number[][] = this.getMembersForNewFieldSize(
-  //     this.state.members,
-  //     this.props.horiz_count,
-  //     this.props.vertic_count
-  //   );
-  //   this.setState({ members: members });
-  // }
+  changeFieldSize(horiz_count: number, vertic_count: number): void {
+    let members: number[][];
+    if (this.state.members === undefined) {
+      members = [...Array(vertic_count)].map(() => Array(horiz_count).fill(0));
+    } else {
+      members = this.getMembersForNewFieldSize(
+        this.state.members,
+        horiz_count,
+        vertic_count
+      );
+    }
+    this.setState({
+      members: members,
+      horiz_count: horiz_count,
+      vertic_count: vertic_count,
+    });
+  }
 
   getGeneration(): number {
     return this.state.iterations;
   }
 
-  getMembers(
+  getFirstGeneration(
     horiz_count: number,
     vertic_count: number,
     filling: number
@@ -181,7 +192,7 @@ class Field extends React.Component<ComponentProps, ComponentState> {
     return items;
   }
 
-  calcNextLabel(membersOld: number[][] | undefined) {
+  calcNextGeneration(membersOld: number[][] | undefined): number[][] {
     if (membersOld === undefined) {
       return [];
     }
@@ -279,22 +290,10 @@ class Field extends React.Component<ComponentProps, ComponentState> {
 
   render(): JSX.Element {
     console.log('Field render');
-    const { horiz_count, vertic_count } = this.props;
-
+    const { horiz_count, vertic_count } = this.state;
     let members: number[][] | undefined = this.state.members;
-
     if (members === undefined) {
       members = [...Array(vertic_count)].map(() => Array(horiz_count).fill(0));
-    } else if (members.length === 0) {
-      members = this.getMembers(horiz_count, vertic_count, 0);
-    } else {
-      if (members.length != vertic_count) {
-        members = this.getMembersForNewFieldSize(
-          members,
-          horiz_count,
-          vertic_count
-        );
-      }
     }
 
     const rows = [];
@@ -311,19 +310,19 @@ class Field extends React.Component<ComponentProps, ComponentState> {
           className = 'Item Item0';
         }
         cell.push(
-          <td key={cellID} id={cellID} className="collapse">
+          <td key={cellID} id={cellID} className="Collapse">
             <div className={className} />
           </td>
         );
       }
       rows.push(
-        <tr key={i} id={rowID} className="collapse">
+        <tr key={i} id={rowID} className="Collapse">
           {cell}
         </tr>
       );
     }
     return (
-      <table id="simple" className="collapse Field">
+      <table id="simple" className="Collapse AutoCenter">
         <tbody>{rows}</tbody>
       </table>
     );

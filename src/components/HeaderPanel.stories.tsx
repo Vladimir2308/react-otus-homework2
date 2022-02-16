@@ -12,7 +12,12 @@ const someFunction = (): void => {
 };
 
 const Template: Story = (args) => (
-  <HeaderPanel generation={0} onclickItemToField={someFunction} {...args} />
+  <HeaderPanel
+    generation={0}
+    onclickItemToField={someFunction}
+    isTimerPause={true}
+    {...args}
+  />
 );
 
 //👇 Each story then reuses that template
@@ -20,4 +25,4 @@ export const Primary = Template.bind({});
 Primary.args = { generaion: 11 };
 
 export const Secondary = Template.bind({});
-Secondary.args = { generaion: 99999 };
+Secondary.args = { generaion: 99999, isTimerPause: false };

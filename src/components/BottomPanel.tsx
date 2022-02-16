@@ -1,6 +1,6 @@
 import React from 'react';
 import './panel.css';
-import { Speed } from '@/components/Wrapper';
+import { Speed } from './Wrapper';
 
 interface ComponentProps {
   onclickItemToField: (button_id: string) => void;
@@ -67,3 +67,5 @@ export default function BottomPanel(props: ComponentProps): JSX.Element {
     </div>
   );
 }
+
+export { BottomPanel };

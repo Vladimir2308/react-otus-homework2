@@ -35,7 +35,7 @@ export default function HeaderPanel(props: ComponentProps): JSX.Element {
     <div className="Panel Panel2">
       <div className="Row">
         <div className="Name">
-          <span>Generate:</span>
+          <span>Filling:</span>
         </div>
         <button
           type="button"
@@ -65,10 +65,13 @@ export default function HeaderPanel(props: ComponentProps): JSX.Element {
         <button type="button" onClick={() => props.onclickItemToField('clear')}>
           Clear
         </button>
-      </div>
-      <div className="Generation">
-        <span>Generation: {props.generation}</span>
+
+        <div className="Generation">
+          <span>Generation: {props.generation}</span>
+        </div>
       </div>
     </div>
   );
 }
+
+export { HeaderPanel };

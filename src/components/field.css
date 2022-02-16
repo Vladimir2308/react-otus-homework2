@@ -1,4 +1,4 @@
-.collapse{
+.Collapse{
   border-collapse: collapse;
   padding: 0;
 }
@@ -14,9 +14,9 @@
 }
 
 .Item0 {
-  background-color: blue;
+  background-color: black;
 }
 
-.Field {
+.AutoCenter {
   margin: 0 auto;
 }
