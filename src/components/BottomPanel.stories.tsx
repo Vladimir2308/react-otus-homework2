@@ -22,7 +22,7 @@ const Template: Story = (args) => (
 
 //👇 Each story then reuses that template
 export const Primary = Template.bind({});
-Primary.args = { selected_size: 2, selected_speed: 250 };
+Primary.args = { selected_size: 2, selected_speed: 150 };
 
 export const Secondary = Template.bind({});
-Secondary.args = { selected_size: 3, selected_speed: 25 };
+Secondary.args = { selected_size: 3, selected_speed: 50 };

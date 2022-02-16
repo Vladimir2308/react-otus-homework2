@@ -4,8 +4,8 @@
 }
 
 .Item{
-  width: 10px;
-  height: 10px;
+  width: 7px;
+  height: 7px;
   border: 1px solid black;
 }
 
@@ -17,3 +17,6 @@
   background-color: blue;
 }
 
+.Field {
+  margin: 0 auto;
+}

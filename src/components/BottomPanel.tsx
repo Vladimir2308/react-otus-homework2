@@ -1,14 +1,15 @@
 import React from 'react';
 import './panel.css';
+import { Speed } from '@/components/Wrapper';
 
 interface ComponentProps {
   onclickItemToField: (button_id: string) => void;
   selected_size: number;
   selected_speed: number;
-  // started: boolean;
 }
 
 export default function BottomPanel(props: ComponentProps): JSX.Element {
+  console.log(' BottomPanel render');
   return (
     <div className="Panel">
       <div className="Row">
@@ -43,22 +44,22 @@ export default function BottomPanel(props: ComponentProps): JSX.Element {
         </div>
         <button
           type="button"
-          onClick={() => props.onclickItemToField('speed1')}
-          disabled={props.selected_speed === 1000}
+          onClick={() => props.onclickItemToField(Speed[Speed.SpeedSlow])}
+          disabled={props.selected_speed === Speed.SpeedSlow}
         >
           Slow
         </button>
         <button
           type="button"
-          onClick={() => props.onclickItemToField('speed2')}
-          disabled={props.selected_speed === 250}
+          onClick={() => props.onclickItemToField(Speed[Speed.SpeedMedium])}
+          disabled={props.selected_speed === Speed.SpeedMedium}
         >
           Medium
         </button>
         <button
           type="button"
-          onClick={() => props.onclickItemToField('speed3')}
-          disabled={props.selected_speed === 25}
+          onClick={() => props.onclickItemToField(Speed[Speed.SpeedFast])}
+          disabled={props.selected_speed === Speed.SpeedFast}
         >
           Fast
         </button>

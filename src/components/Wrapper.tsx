@@ -1,82 +1,40 @@
 import React from 'react';
 import { Field } from './Field';
-import './field.css';
+import './wrapper.css';
 import BottomPanel from './BottomPanel';
 import HeaderPanel from './HeaderPanel';
 
 interface ComponentState {
-  date: Date;
-  filling_btn_id?: string | null;
-  horiz_count: number;
-  vertic_count: number;
+  filling_btn_id?: string;
   speed: number;
   size: number;
   generation: number;
   isTimerPause: boolean;
-  isClear: boolean;
-  isStarted: boolean;
 }
 
-interface ComponentProps {
-  error?: Error | null;
+export enum Speed {
+  SpeedSlow = 500,
+  SpeedMedium = 150,
+  SpeedFast = 50,
 }
 
 class Wrapper extends React.Component<unknown, ComponentState> {
-  timerID: NodeJS.Timer | undefined;
   private readonly fieldElement: React.RefObject<Field>;
   constructor(state: ComponentState) {
     super(state);
     this.fieldElement = React.createRef();
-    console.log('constructor');
-    this.handleClick = this.handleClick.bind(this);
-    // this.setGeneration = this.setGeneration.bind(this);
+    console.log(' Wrapper constructor');
     this.state = {
-      date: new Date(),
-      horiz_count: 50,
-      vertic_count: 30,
-      speed: 1000,
+      speed: Speed.SpeedSlow,
       size: 1,
       generation: 0,
       isTimerPause: false,
-      isClear: false,
-      isStarted: false,
     };
   }
 
-  componentDidMount(): void {
-    // this.timerID = setInterval(() => this.tick(), 1000);
-    // document.addEventListener('click', this.handleClick);
-  }
-
-  componentWillUnmount(): void {
-    clearInterval(this.timerID as NodeJS.Timeout);
-    document.removeEventListener('click', this.handleClick);
-  }
-
-  componentDidUpdate(nextState: ComponentState): boolean {
-    return true;
-  }
-
-  shouldComponentUpdate(
-    nextProps: ComponentProps,
-    nextState: ComponentState
-  ): boolean {
-    return true;
-  }
-
-  tick(): void {
-    this.setState({ date: new Date() });
-  }
-
-  handleClick = (e: Event) => {
-    if ((e.target as Element).id === 'button1') {
-      e.cancelBubble;
-    }
-  };
-
   setGeneration = (generation: number): void => {
-    if (generation === -1) {
-      this.setState({ isStarted: false, generation: generation });
+    if (generation === 0) {
+      this.setState({ generation: generation });
     } else {
       this.setState({ generation: generation });
     }
@@ -84,24 +42,25 @@ class Wrapper extends React.Component<unknown, ComponentState> {
 
   onclickItemToField = (button_id: string): void => {
     if (button_id === 'size1') {
-      this.setState({ horiz_count: 50, vertic_count: 30, size: 1 });
+      this.setState({ size: 1 });
+      // this.fieldElement.current?.changeFieldSize();
     } else if (button_id === 'size2') {
-      this.setState({ horiz_count: 70, vertic_count: 50, size: 2 });
+      this.setState({ size: 2 });
+      // this.fieldElement.current?.changeFieldSize();
     } else if (button_id === 'size3') {
-      this.setState({ horiz_count: 100, vertic_count: 80, size: 3 });
-    }
-    if (button_id === 'speed1') {
-      this.fieldElement.current?.changeSpeed(1000);
-      this.setState({ speed: 1000 });
-    } else if (button_id === 'speed2') {
-      this.fieldElement.current?.changeSpeed(250);
-      this.setState({ speed: 250 });
-    } else if (button_id === 'speed3') {
-      this.fieldElement.current?.changeSpeed(25);
-      this.setState({ speed: 25 });
+      this.setState({ size: 3 });
+      // this.fieldElement.current?.changeFieldSize();
+    } else if (button_id === Speed[Speed.SpeedSlow]) {
+      this.fieldElement.current?.changeSpeed(Speed.SpeedSlow);
+      this.setState({ speed: Speed.SpeedSlow });
+    } else if (button_id === Speed[Speed.SpeedMedium]) {
+      this.fieldElement.current?.changeSpeed(Speed.SpeedMedium);
+      this.setState({ speed: Speed.SpeedMedium });
+    } else if (button_id === Speed[Speed.SpeedFast]) {
+      this.fieldElement.current?.changeSpeed(Speed.SpeedFast);
+      this.setState({ speed: Speed.SpeedFast });
     } else if (button_id === 'start') {
       this.fieldElement.current?.startLife();
-      this.setState({ isStarted: true });
       this.setState({ isTimerPause: false });
     } else if (button_id === 'resume') {
       this.fieldElement.current?.resumeLife();
@@ -110,7 +69,7 @@ class Wrapper extends React.Component<unknown, ComponentState> {
       this.fieldElement.current?.pauseLife();
       this.setState({ isTimerPause: true });
     } else if (button_id === 'clear') {
-      this.setState({ filling_btn_id: null });
+      this.setState({ filling_btn_id: undefined });
       this.fieldElement.current?.clearField();
     } else if (button_id === 'gen1') {
       this.fieldElement.current?.generateField(0.25);
@@ -124,9 +83,23 @@ class Wrapper extends React.Component<unknown, ComponentState> {
     }
   };
 
-  render() {
+  render(): JSX.Element {
+    console.log('Wrapper render');
+
+    let horiz_count: number;
+    let vertic_count: number;
+    if (this.state.size === 1) {
+      horiz_count = 50;
+      vertic_count = 30;
+    } else if (this.state.size === 2) {
+      horiz_count = 70;
+      vertic_count = 50;
+    } else {
+      horiz_count = 100;
+      vertic_count = 80;
+    }
     return (
-      <div>
+      <div className="Wrapper">
         <HeaderPanel
           onclickItemToField={this.onclickItemToField}
           generation={this.state.generation}
@@ -134,8 +107,8 @@ class Wrapper extends React.Component<unknown, ComponentState> {
           active_btn={this.state.filling_btn_id}
         />
         <Field
-          horiz_count={this.state.horiz_count}
-          vertic_count={this.state.vertic_count}
+          horiz_count={horiz_count}
+          vertic_count={vertic_count}
           intervalMs={this.state.speed}
           ref={this.fieldElement}
           setGeneration={this.setGeneration}
