@@ -1,5 +1,30 @@
 import React from 'react';
-import './field.css';
+import styled from 'styled-components';
+
+const FieldStyle = styled.div`
+  .Collapse {
+    border-collapse: collapse;
+    padding: 0;
+  }
+
+  .Item {
+    width: 7px;
+    height: 7px;
+    border: 1px solid black;
+  }
+
+  .Item1 {
+    background-color: red;
+  }
+
+  .Item0 {
+    background-color: black;
+  }
+
+  .AutoCenter {
+    margin: 0 auto;
+  }
+`;
 
 interface ComponentProps {
   getMembers?: (horiz_count: number, vertic_count: number) => number[][];
@@ -314,9 +339,11 @@ class Field extends React.Component<ComponentProps, ComponentState> {
       );
     }
     return (
-      <table id="simple" className="Collapse AutoCenter">
-        <tbody>{rows}</tbody>
-      </table>
+      <FieldStyle>
+        <table id="simple" className="Collapse AutoCenter">
+          <tbody>{rows}</tbody>
+        </table>
+      </FieldStyle>
     );
   }
 }

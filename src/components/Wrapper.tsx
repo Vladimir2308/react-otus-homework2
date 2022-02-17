@@ -1,8 +1,13 @@
 import React from 'react';
 import { Field } from './Field';
-import './wrapper.css';
 import BottomPanel from './BottomPanel';
 import HeaderPanel from './HeaderPanel';
+import styled from 'styled-components';
+
+const WrapperStyle = styled.div`
+  width: 900px;
+  margin: 0 auto;
+`;
 
 interface ComponentState {
   filling_btn_id?: string;
@@ -84,7 +89,7 @@ class Wrapper extends React.Component<unknown, ComponentState> {
 
   render(): JSX.Element {
     return (
-      <div className="Wrapper">
+      <WrapperStyle>
         <HeaderPanel
           onclickItemToField={this.onclickItemToField}
           generation={this.state.generation}
@@ -104,7 +109,7 @@ class Wrapper extends React.Component<unknown, ComponentState> {
           selected_size={this.state.size}
           selected_speed={this.state.speed}
         />
-      </div>
+      </WrapperStyle>
     );
   }
 }

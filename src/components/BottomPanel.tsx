@@ -1,6 +1,33 @@
 import React from 'react';
-import './panel.css';
 import { Speed } from './Wrapper';
+import styled from 'styled-components';
+
+const BottomPanelStyle = styled.div`
+  padding: 0;
+  margin: 0 auto;
+  width: 628px;
+  height: 100px;
+  border: 1px solid black;
+  font-size: 14pt;
+  flex-wrap: wrap;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 0 0 12px 12px;
+  .Name {
+    margin: 15px 15px 0 0;
+    width: 120px;
+    display: inline-block;
+  }
+  .Row {
+    display: inline;
+    justify-content: space-evenly;
+  }
+  button {
+    margin: 0 30px 0 0;
+    width: 120px;
+    height: 30px;
+  }
+`;
 
 interface ComponentProps {
   onclickItemToField: (button_id: string) => void;
@@ -8,9 +35,9 @@ interface ComponentProps {
   selected_speed: number;
 }
 
-function BottomPanel(props: ComponentProps): JSX.Element {
+export function BottomPanel(props: ComponentProps): JSX.Element {
   return (
-    <div className="Panel">
+    <BottomPanelStyle>
       <div className="Row">
         <div className="Name">
           <span>Board Size:</span>
@@ -65,7 +92,7 @@ function BottomPanel(props: ComponentProps): JSX.Element {
           Fast
         </button>
       </div>
-    </div>
+    </BottomPanelStyle>
   );
 }
 
