@@ -9,7 +9,6 @@ interface ComponentProps {
 }
 
 export default function HeaderPanel(props: ComponentProps): JSX.Element {
-  console.log(' HeaderPanel render');
   let buttonRun;
 
   if (props.generation === 0) {

@@ -23,7 +23,6 @@ class Wrapper extends React.Component<unknown, ComponentState> {
   constructor(state: ComponentState) {
     super(state);
     this.fieldElement = React.createRef();
-    console.log(' Wrapper constructor');
     this.state = {
       speed: Speed.SpeedSlow,
       size: 1,
@@ -84,8 +83,6 @@ class Wrapper extends React.Component<unknown, ComponentState> {
   };
 
   render(): JSX.Element {
-    console.log('Wrapper render');
-
     return (
       <div className="Wrapper">
         <HeaderPanel

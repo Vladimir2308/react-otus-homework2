@@ -9,7 +9,6 @@ interface ComponentProps {
 }
 
 function BottomPanel(props: ComponentProps): JSX.Element {
-  console.log(' BottomPanel render');
   return (
     <div className="Panel">
       <div className="Row">

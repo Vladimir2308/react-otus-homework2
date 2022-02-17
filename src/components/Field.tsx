@@ -22,7 +22,6 @@ class Field extends React.Component<ComponentProps, ComponentState> {
   timerID: NodeJS.Timer | undefined;
   constructor(props: ComponentProps) {
     super(props);
-    console.log('Field constructor');
     this.state = {
       iterations: -1,
       intervalMs: this.props.intervalMs,
@@ -40,13 +39,7 @@ class Field extends React.Component<ComponentProps, ComponentState> {
     this.props.setGeneration(this.state.iterations);
   }
 
-  componentDidMount(): void {
-    console.log('Field componentDidMount');
-    // this.timerID = setInterval(() => this.tick(), Speed.SpeedSlow);
-  }
-
   componentWillUnmount(): void {
-    console.log(' Field componentWillUnmount');
     clearInterval(this.timerID as NodeJS.Timeout);
   }
 
@@ -289,7 +282,6 @@ class Field extends React.Component<ComponentProps, ComponentState> {
   }
 
   render(): JSX.Element {
-    console.log('Field render');
     const { horiz_count, vertic_count } = this.state;
     let members: number[][] | undefined = this.state.members;
     if (members === undefined) {
