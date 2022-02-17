@@ -1,6 +1,6 @@
 import React from 'react';
 import './field.css';
-import { Speed } from './Wrapper';
+
 interface ComponentProps {
   getMembers?: (horiz_count: number, vertic_count: number) => number[][];
   setGeneration: (generation: number) => void;

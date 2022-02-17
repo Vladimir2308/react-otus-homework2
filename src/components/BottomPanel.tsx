@@ -8,7 +8,7 @@ interface ComponentProps {
   selected_speed: number;
 }
 
-export default function BottomPanel(props: ComponentProps): JSX.Element {
+function BottomPanel(props: ComponentProps): JSX.Element {
   console.log(' BottomPanel render');
   return (
     <div className="Panel">
@@ -18,21 +18,21 @@ export default function BottomPanel(props: ComponentProps): JSX.Element {
         </div>
         <button
           type="button"
-          onClick={() => props.onclickItemToField('size1')}
+          onClick={(): void => props.onclickItemToField('size1')}
           disabled={props.selected_size === 1}
         >
           Size: 50x30
         </button>
         <button
           type="button"
-          onClick={() => props.onclickItemToField('size2')}
+          onClick={(): void => props.onclickItemToField('size2')}
           disabled={props.selected_size === 2}
         >
           Size: 70x50
         </button>
         <button
           type="button"
-          onClick={() => props.onclickItemToField('size3')}
+          onClick={(): void => props.onclickItemToField('size3')}
           disabled={props.selected_size === 3}
         >
           Size: 100x80
@@ -44,21 +44,23 @@ export default function BottomPanel(props: ComponentProps): JSX.Element {
         </div>
         <button
           type="button"
-          onClick={() => props.onclickItemToField(Speed[Speed.SpeedSlow])}
+          onClick={(): void => props.onclickItemToField(Speed[Speed.SpeedSlow])}
           disabled={props.selected_speed === Speed.SpeedSlow}
         >
           Slow
         </button>
         <button
           type="button"
-          onClick={() => props.onclickItemToField(Speed[Speed.SpeedMedium])}
+          onClick={(): void =>
+            props.onclickItemToField(Speed[Speed.SpeedMedium])
+          }
           disabled={props.selected_speed === Speed.SpeedMedium}
         >
           Medium
         </button>
         <button
           type="button"
-          onClick={() => props.onclickItemToField(Speed[Speed.SpeedFast])}
+          onClick={(): void => props.onclickItemToField(Speed[Speed.SpeedFast])}
           disabled={props.selected_speed === Speed.SpeedFast}
         >
           Fast
@@ -68,4 +70,4 @@ export default function BottomPanel(props: ComponentProps): JSX.Element {
   );
 }
 
-export { BottomPanel };
+export default React.memo(BottomPanel);

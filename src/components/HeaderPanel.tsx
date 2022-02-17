@@ -14,19 +14,28 @@ export default function HeaderPanel(props: ComponentProps): JSX.Element {
 
   if (props.generation === 0) {
     buttonRun = (
-      <button type="button" onClick={() => props.onclickItemToField('start')}>
+      <button
+        type="button"
+        onClick={(): void => props.onclickItemToField('start')}
+      >
         Start
       </button>
     );
   } else if (props.isTimerPause) {
     buttonRun = (
-      <button type="button" onClick={() => props.onclickItemToField('resume')}>
+      <button
+        type="button"
+        onClick={(): void => props.onclickItemToField('resume')}
+      >
         Run
       </button>
     );
   } else {
     buttonRun = (
-      <button type="button" onClick={() => props.onclickItemToField('pause')}>
+      <button
+        type="button"
+        onClick={(): void => props.onclickItemToField('pause')}
+      >
         Pause
       </button>
     );
@@ -39,30 +48,33 @@ export default function HeaderPanel(props: ComponentProps): JSX.Element {
         </div>
         <button
           type="button"
-          onClick={() => props.onclickItemToField('gen1')}
+          onClick={(): void => props.onclickItemToField('gen1')}
           disabled={props.active_btn === 'gen1'}
         >
           0.25
         </button>
         <button
           type="button"
-          onClick={() => props.onclickItemToField('gen2')}
+          onClick={(): void => props.onclickItemToField('gen2')}
           disabled={props.active_btn === 'gen2'}
         >
           0.5
         </button>
         <button
           type="button"
-          onClick={() => props.onclickItemToField('gen3')}
+          onClick={(): void => props.onclickItemToField('gen3')}
           disabled={props.active_btn === 'gen3'}
         >
           0.75
         </button>
       </div>
       <div className="Row">
-        <div className="EmptyBlock"></div>
+        <div className="EmptyBlock" />
         {buttonRun}
-        <button type="button" onClick={() => props.onclickItemToField('clear')}>
+        <button
+          type="button"
+          onClick={(): void => props.onclickItemToField('clear')}
+        >
           Clear
         </button>
 
