@@ -7,7 +7,7 @@ describe('Render HeaderPanel', () => {
   test('renders HeaderPanel generation 0, timer false', () => {
     render(
       <HeaderPanel
-        onclickItemToField={someFunction}
+        onclickItemToField={(): null => null}
         generation={0}
         isTimerPause={false}
       />
@@ -16,7 +16,7 @@ describe('Render HeaderPanel', () => {
   test('renders HeaderPanel generation 1, timer false', () => {
     render(
       <HeaderPanel
-        onclickItemToField={someFunction}
+        onclickItemToField={(): null => null}
         generation={1}
         isTimerPause={false}
       />
@@ -25,14 +25,10 @@ describe('Render HeaderPanel', () => {
   test('renders HeaderPanel generation 1, timer true', () => {
     render(
       <HeaderPanel
-        onclickItemToField={someFunction}
+        onclickItemToField={(): null => null}
         generation={1}
         isTimerPause={true}
       />
     );
   });
 });
-
-const someFunction = (): void => {
-  return;
-};
