@@ -43,7 +43,7 @@ interface ComponentState {
   vertic_count: number;
 }
 
-class Field extends React.Component<ComponentProps, ComponentState> {
+export class Field extends React.Component<ComponentProps, ComponentState> {
   timerID: NodeJS.Timer | undefined;
   constructor(props: ComponentProps) {
     super(props);
@@ -347,5 +347,3 @@ class Field extends React.Component<ComponentProps, ComponentState> {
     );
   }
 }
-
-export { Field };

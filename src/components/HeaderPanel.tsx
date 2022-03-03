@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Button } from './Button';
 
 interface ComponentProps {
   onclickItemToField: (button_id: string) => void;
@@ -47,36 +48,20 @@ const HeaderPanelStyle = styled.div`
   }
 `;
 
-export default function HeaderPanel(props: ComponentProps): JSX.Element {
-  let buttonRun;
-
+export const HeaderPanel: React.FC<ComponentProps> = (
+  props: ComponentProps
+) => {
+  let button_id: string;
+  let button_title: string;
   if (props.generation === 0) {
-    buttonRun = (
-      <button
-        type="button"
-        onClick={(): void => props.onclickItemToField('start')}
-      >
-        Start
-      </button>
-    );
+    button_id = 'start';
+    button_title = 'Start';
   } else if (props.isTimerPause) {
-    buttonRun = (
-      <button
-        type="button"
-        onClick={(): void => props.onclickItemToField('resume')}
-      >
-        Run
-      </button>
-    );
+    button_id = 'resume';
+    button_title = 'Run';
   } else {
-    buttonRun = (
-      <button
-        type="button"
-        onClick={(): void => props.onclickItemToField('pause')}
-      >
-        Pause
-      </button>
-    );
+    button_id = 'pause';
+    button_title = 'Pause';
   }
   return (
     <HeaderPanelStyle>
@@ -108,7 +93,11 @@ export default function HeaderPanel(props: ComponentProps): JSX.Element {
       </div>
       <div className="Row">
         <div className="EmptyBlock" />
-        {buttonRun}
+        <Button
+          button_id={button_id}
+          title={button_title}
+          onclickItemToField={(): void => props.onclickItemToField(button_id)}
+        />
         <button
           type="button"
           onClick={(): void => props.onclickItemToField('clear')}
@@ -122,6 +111,4 @@ export default function HeaderPanel(props: ComponentProps): JSX.Element {
       </div>
     </HeaderPanelStyle>
   );
-}
-
-export { HeaderPanel };
+};

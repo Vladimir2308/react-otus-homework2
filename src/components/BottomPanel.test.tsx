@@ -8,14 +8,10 @@ describe('BottomPanel', () => {
   test('renders BottomPanel component', () => {
     render(
       <BottomPanel
-        onclickItemToField={someFunction}
+        onclickItemToField={(): null => null}
         selected_size={1}
         selected_speed={Speed.SpeedSlow}
       />
     );
   });
 });
-
-const someFunction = (): void => {
-  return;
-};

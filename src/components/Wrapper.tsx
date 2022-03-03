@@ -1,7 +1,7 @@
 import React from 'react';
 import { Field } from './Field';
-import BottomPanel from './BottomPanel';
-import HeaderPanel from './HeaderPanel';
+import { BottomPanel } from './BottomPanel';
+import { HeaderPanel } from './HeaderPanel';
 import styled from 'styled-components';
 
 const WrapperStyle = styled.div`
@@ -23,7 +23,7 @@ export enum Speed {
   SpeedFast = 50,
 }
 
-class Wrapper extends React.Component<unknown, ComponentState> {
+export class Wrapper extends React.Component<unknown, ComponentState> {
   private readonly fieldElement: React.RefObject<Field>;
   constructor(state: ComponentState) {
     super(state);
@@ -113,5 +113,3 @@ class Wrapper extends React.Component<unknown, ComponentState> {
     );
   }
 }
-
-export { Wrapper };

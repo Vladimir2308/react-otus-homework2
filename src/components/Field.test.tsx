@@ -18,7 +18,7 @@ describe('render Field component', () => {
 });
 
 describe('Next generation calc ', () => {
-  it('row completed 1', () => {
+  test('row completed 1', () => {
     const field2 = new Field({
       horiz_count: 5,
       vertic_count: 5,
@@ -40,7 +40,7 @@ describe('Next generation calc ', () => {
       [0, 0, 0, 0, 0],
     ]);
   });
-  it('field completed 1', () => {
+  test('field completed 1', () => {
     const field2 = new Field({
       horiz_count: 5,
       vertic_count: 5,
@@ -62,7 +62,7 @@ describe('Next generation calc ', () => {
       [1, 0, 0, 0, 1],
     ]);
   });
-  it('field completed 0', () => {
+  test('field completed 0', () => {
     const field2 = new Field({
       horiz_count: 5,
       vertic_count: 5,
@@ -84,7 +84,7 @@ describe('Next generation calc ', () => {
       [0, 0, 0, 0, 0],
     ]);
   });
-  it('field completed for new life', () => {
+  test('field completed for new life', () => {
     const field2 = new Field({
       horiz_count: 5,
       vertic_count: 5,
@@ -113,7 +113,7 @@ const someFunction = (): void => {
 };
 
 describe('Field percentage filling ', () => {
-  it('filling 0.25', () => {
+  test('filling 0.25', () => {
     const horizcount = 5;
     const verticcount = 5;
     const filling = 0.25;
@@ -137,7 +137,7 @@ describe('Field percentage filling ', () => {
     expect(Math.floor(verticcount * horizcount * filling)).toBe(count);
   });
 
-  it('filling 0.5', () => {
+  test('filling 0.5', () => {
     const horizcount = 5;
     const verticcount = 5;
     const filling = 0.5;
@@ -161,7 +161,7 @@ describe('Field percentage filling ', () => {
     expect(Math.floor(verticcount * horizcount * filling)).toBe(count);
   });
 
-  it('filling 0.75', () => {
+  test('filling 0.75', () => {
     const horizcount = 5;
     const verticcount = 5;
     const filling = 0.75;

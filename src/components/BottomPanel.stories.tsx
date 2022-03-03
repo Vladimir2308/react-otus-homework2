@@ -1,6 +1,6 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-import BottomPanel from './BottomPanel';
+import { BottomPanel } from './BottomPanel';
 
 export default {
   component: BottomPanel,

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-import HeaderPanel from './HeaderPanel';
+import { HeaderPanel } from './HeaderPanel';
 
 export default {
   component: HeaderPanel,

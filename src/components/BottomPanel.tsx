@@ -35,7 +35,7 @@ interface ComponentProps {
   selected_speed: number;
 }
 
-export function BottomPanel(props: ComponentProps): JSX.Element {
+export let BottomPanel: React.FC<ComponentProps> = (props: ComponentProps) => {
   return (
     <BottomPanelStyle>
       <div className="Row">
@@ -94,6 +94,6 @@ export function BottomPanel(props: ComponentProps): JSX.Element {
       </div>
     </BottomPanelStyle>
   );
-}
+};
 
-export default React.memo(BottomPanel);
+BottomPanel = React.memo(BottomPanel);
