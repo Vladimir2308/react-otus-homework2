@@ -1,132 +1,115 @@
 import React from 'react';
 import { Field } from './Field';
-import './field.css';
+import { BottomPanel } from './BottomPanel';
+import { HeaderPanel } from './HeaderPanel';
+import styled from 'styled-components';
+
+const WrapperStyle = styled.div`
+  width: 900px;
+  margin: 0 auto;
+`;
 
 interface ComponentState {
-  date: Date;
-  fact: string;
-  isLoading: boolean;
-  error?: Error | null;
-  factNum: number;
-  infoMsg?: string | null;
+  filling_btn_id?: string;
+  speed: number;
+  size: number;
+  generation: number;
+  isTimerPause: boolean;
 }
 
-class Wrapper extends React.Component<unknown, ComponentState> {
-  timerID: NodeJS.Timer | undefined;
+export enum Speed {
+  SpeedSlow = 500,
+  SpeedMedium = 150,
+  SpeedFast = 50,
+}
+
+export class Wrapper extends React.Component<unknown, ComponentState> {
+  private readonly fieldElement: React.RefObject<Field>;
   constructor(state: ComponentState) {
     super(state);
-    console.log('constructor');
-    this.handleClick = this.handleClick.bind(this);
+    this.fieldElement = React.createRef();
     this.state = {
-      date: new Date(),
-      fact: '',
-      isLoading: false,
-      error: null,
-      factNum: 0,
-      infoMsg: null,
+      speed: Speed.SpeedSlow,
+      size: 1,
+      generation: 0,
+      isTimerPause: false,
     };
   }
 
-  componentDidMount(): void {
-    console.log('componentDidMount');
-    this.setState({ isLoading: true });
-    this.timerID = setInterval(() => this.tick(), 1000);
-
-    this.getExternalData();
-    document.addEventListener('click', this.handleClick);
-  }
-
-  componentWillUnmount(): void {
-    console.log('componentWillUnmount');
-    clearInterval(this.timerID as NodeJS.Timeout);
-    document.removeEventListener('click', this.handleClick);
-  }
-
-  componentDidUpdate(nextState: ComponentState): void {
-    console.log('__________this.state.factNum - ' + this.state.factNum);
-    console.log('__________nextState.factNumm - ' + nextState.factNum);
-    if (this.state.factNum != nextState.factNum) {
-      if (this.state.factNum === 10) {
-        console.log('_____________  fact num set 10 !!!!!!!!!');
-        this.setState({ infoMsg: '10 фактов было показано', factNum: 11 });
-      }
-    }
-  }
-
-  tick(): void {
-    this.setState({ date: new Date() });
-  }
-
-  getExternalData() {
-    const url = 'https://catfact.ninja/fact';
-    let factNum = this.state.factNum;
-    // const factFrom;
-    let infoMsg: string | null;
-    if (factNum == 11) {
-      infoMsg = null;
+  setGeneration = (generation: number): void => {
+    if (generation === 0) {
+      this.setState({ generation: generation });
     } else {
-      factNum++;
-    }
-    fetch(url)
-      .then((response) => response.json())
-      .then((result) =>
-        this.setState({
-          fact: result.fact,
-          factNum: factNum,
-          isLoading: false,
-          infoMsg: infoMsg,
-        })
-      )
-      .catch((e) => this.setState({ infoMsg: e, isLoading: false }));
-  }
-
-  handleClick = (e: Event) => {
-    if ((e.target as Element).id === 'button1') {
-      this.getExternalData();
-      e.cancelBubble;
+      this.setState({ generation: generation });
     }
   };
 
-  currentTime(date: Date): string {
-    let seconds = '' + date.getSeconds();
-    let minutes = '' + date.getMinutes();
-    if (seconds.length == 1) {
-      seconds = '0' + seconds;
+  onclickItemToField = (button_id: string): void => {
+    if (button_id === 'size1') {
+      this.setState({ size: 1 });
+      this.fieldElement.current?.changeFieldSize(50, 30);
+    } else if (button_id === 'size2') {
+      this.setState({ size: 2 });
+      this.fieldElement.current?.changeFieldSize(70, 50);
+    } else if (button_id === 'size3') {
+      this.setState({ size: 3 });
+      this.fieldElement.current?.changeFieldSize(100, 80);
+    } else if (button_id === Speed[Speed.SpeedSlow]) {
+      this.fieldElement.current?.changeSpeed(Speed.SpeedSlow);
+      this.setState({ speed: Speed.SpeedSlow });
+    } else if (button_id === Speed[Speed.SpeedMedium]) {
+      this.fieldElement.current?.changeSpeed(Speed.SpeedMedium);
+      this.setState({ speed: Speed.SpeedMedium });
+    } else if (button_id === Speed[Speed.SpeedFast]) {
+      this.fieldElement.current?.changeSpeed(Speed.SpeedFast);
+      this.setState({ speed: Speed.SpeedFast });
+    } else if (button_id === 'start') {
+      this.fieldElement.current?.startLife();
+      this.setState({ isTimerPause: false });
+    } else if (button_id === 'resume') {
+      this.fieldElement.current?.resumeLife();
+      this.setState({ isTimerPause: false });
+    } else if (button_id === 'pause') {
+      this.fieldElement.current?.pauseLife();
+      this.setState({ isTimerPause: true });
+    } else if (button_id === 'clear') {
+      this.setState({ filling_btn_id: undefined });
+      this.fieldElement.current?.clearField();
+    } else if (button_id === 'gen1') {
+      this.fieldElement.current?.generateField(0.25);
+      this.setState({ filling_btn_id: 'gen1' });
+    } else if (button_id === 'gen2') {
+      this.fieldElement.current?.generateField(0.5);
+      this.setState({ filling_btn_id: 'gen2' });
+    } else if (button_id === 'gen3') {
+      this.fieldElement.current?.generateField(0.75);
+      this.setState({ filling_btn_id: 'gen3' });
     }
-    if (minutes.length == 1) {
-      minutes = '0' + minutes;
-    }
-    return date.getHours() + ' : ' + minutes + ' : ' + seconds;
-  }
+  };
 
-  render() {
-    console.log('Wrapper render');
-    const { isLoading, error } = this.state;
-
-    if (error) {
-      return <p>Произошла ошибка {error.message}</p>;
-    }
-    let fact;
-    if (isLoading) {
-      fact = <p data-testid="loading">Loading ...</p>;
-    } else {
-      fact = <h3 data-testid="fact">Случайный факт: {this.state.fact}</h3>;
-    }
-    let infoMsg;
-
-    if (this.state.infoMsg) {
-      infoMsg = <h3>{this.state.infoMsg}</h3>;
-    }
+  render(): JSX.Element {
     return (
-      <div>
-        <h3>Текущее время {this.currentTime(this.state.date)}</h3>
-        <Field horiz_count={5} vertic_count={5} />
-        {fact}
-        {infoMsg}
-        <button id="button1">Следующий факт</button>
-      </div>
+      <WrapperStyle>
+        <HeaderPanel
+          onclickItemToField={this.onclickItemToField}
+          generation={this.state.generation}
+          isTimerPause={this.state.isTimerPause}
+          active_btn={this.state.filling_btn_id}
+        />
+        <Field
+          intervalMs={this.state.speed}
+          ref={this.fieldElement}
+          setGeneration={this.setGeneration}
+          filling_btn_id={this.state.filling_btn_id}
+          horiz_count={50}
+          vertic_count={30}
+        />
+        <BottomPanel
+          onclickItemToField={this.onclickItemToField}
+          selected_size={this.state.size}
+          selected_speed={this.state.speed}
+        />
+      </WrapperStyle>
     );
   }
 }
-
-export { Wrapper };

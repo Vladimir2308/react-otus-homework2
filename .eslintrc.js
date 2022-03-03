@@ -27,6 +27,8 @@ module.exports = {
         endOfLine: 'auto',
       },
     ],
+
+    'react/display-name': 'off',
     'react/prop-types': 0,
     '@typescript-eslint/explicit-function-return-type': 1,
   },

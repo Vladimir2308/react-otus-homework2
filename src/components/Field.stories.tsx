@@ -7,8 +7,18 @@ export default {
   title: 'Field',
 } as Meta;
 
+const someFunction = (): void => {
+  return;
+};
+
 const Template: Story = (args) => (
-  <Field horiz_count={0} vertic_count={0} {...args} />
+  <Field
+    horiz_count={0}
+    vertic_count={0}
+    intervalMs={1000}
+    setGeneration={someFunction}
+    {...args}
+  />
 );
 
 //👇 Each story then reuses that template

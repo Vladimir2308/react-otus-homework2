@@ -1,11 +1,10 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-
-import Item from './Item';
+import { BottomPanel } from './BottomPanel';
 
 export default {
-  component: Item,
-  title: 'Item',
+  component: BottomPanel,
+  title: 'BottomPanel',
 } as Meta;
 
 const someFunction = (): void => {
@@ -13,19 +12,17 @@ const someFunction = (): void => {
 };
 
 const Template: Story = (args) => (
-  <Item
+  <BottomPanel
+    selected_size={1}
+    selected_speed={25}
     onclickItemToField={someFunction}
-    order_num={0}
-    display_num={null}
     {...args}
   />
 );
 
+//👇 Each story then reuses that template
 export const Primary = Template.bind({});
-Primary.args = { display_num: 2 };
+Primary.args = { selected_size: 2, selected_speed: 150 };
 
 export const Secondary = Template.bind({});
-Secondary.args = { display_num: 5 };
-
-export const Tertiary = Template.bind({});
-Tertiary.args = { display_num: 999 };
+Secondary.args = { selected_size: 3, selected_speed: 50 };

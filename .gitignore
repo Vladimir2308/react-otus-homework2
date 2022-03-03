@@ -2,7 +2,7 @@
 .vscode
 node_modules
 dist
-
+/coverage/
 ### STS ###
 .apt_generated
 .classpath
